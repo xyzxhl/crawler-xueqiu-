@@ -44,7 +44,6 @@ func GetChangeData(symbol string) ([]pj.LChange, error) {
 	content.ReadFrom(resp.Body)
 	changes, err := pj.LProcessJson(content.Bytes())
 	if err != nil {
-		errch <- err
 		return nil, err
 	}
 
@@ -65,13 +64,11 @@ func Crawl(symbols []string) {
 	dates := make(map[string]time.Time)
 
 	for _, symbol := range symbols {
-		changes, err := GetChangeData(symbol)
-		if err != nil {
-			errch <- err
-			return
+		changes, _ := GetChangeData(symbol)
+		if changes != nil {
+			data[symbol] = changes
+			dates[symbol] = changes[0].T
 		}
-		data[symbol] = changes
-		dates[symbol] = changes[0].T
 	}
 
 	db.FINameUpdateDate(dates)

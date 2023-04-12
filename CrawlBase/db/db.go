@@ -35,21 +35,22 @@ func InitDB() error {
 }
 
 func FINameInsert(symbol string, name string) error {
-	_, err := db.Exec("INSERT INTO FIName(symbol,name,earliest_date)VALUES (?,?,?)", symbol, name, nil)
+	_, err := db.Exec("INSERT INTO FIName(symbol,name,earliest_date)VALUES(?,?,?)", symbol, name, nil)
 	return err
 }
 
 func FINameUpdateDate(dates map[string]time.Time) error {
-	instBase := "UPDATE FIName SET earliest_date = CASE symbol "
+	instBase := "INSERT INTO FIName(symbol,earliest_date)VALUES"
 	var buf bytes.Buffer
 	buf.WriteString(instBase)
 	vals := []interface{}{}
 	for symbol, date := range dates {
-		buf.WriteString("WHEN ? THEN ? ")
+		buf.WriteString("(?,?),")
 		vals = append(vals, symbol, date)
 	}
-	buf.WriteString("END")
 	inst := buf.String()
+	inst = inst[:len(inst)-1]
+	inst = inst + " ON DUPLICATE KEY UPDATE earliest_date=VALUES(earliest_date)"
 
 	_, err := db.Exec(inst, vals...)
 	return err
