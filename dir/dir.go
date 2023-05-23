@@ -23,7 +23,7 @@ func GetFundsByType(t int, cookie string, client *http.Client) []pj.RFund {
 func main() {
 	db.InitDB()
 	client := &http.Client{}
-	cookie := xqCookie.GetCookie(client)
+	cookie, _ := xqCookie.GetCookie(client)
 	for i := 11; i < 21; i++ {
 		Funds := GetFundsByType(i, cookie, client)
 		for _, v := range Funds {

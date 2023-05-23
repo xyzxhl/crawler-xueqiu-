@@ -25,7 +25,7 @@ func InitDB() error {
 		return mi
 	}
 
-	tmp, err := sql.Open("mysql", "root:12345678@tcp(47.120.8.50:3306)/FundsAndIndices?parseTime=true")
+	tmp, err := sql.Open("mysql", "root:12345678@tcp(47.120.8.50:3306)/Funds_Indices?parseTime=true")
 	if err != nil {
 		return err
 	}
