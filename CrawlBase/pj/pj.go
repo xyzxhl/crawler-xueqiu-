@@ -20,7 +20,6 @@ type LJson struct {
 type LChange struct {
 	T       time.Time
 	Percent float32
-	Close   float32
 }
 
 type RFund struct {
@@ -62,7 +61,6 @@ func LProcessJson(content []byte) ([]LChange, error) {
 	for i, v := range data {
 		change[i].T = time.Unix(int64(v[0]/1000)+86400, 0)
 		change[i].Percent = v[7]
-		change[i].Close = v[5]
 	}
 
 	return change, nil

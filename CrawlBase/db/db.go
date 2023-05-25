@@ -75,14 +75,14 @@ func FINameGetAllSymbols() ([]string, error) {
 }
 
 func CHRecordInsert(data map[string][]pj.LChange) error {
-	instBase := "INSERT INTO CHRecord(symbol,date,percent,close)VALUES"
+	instBase := "INSERT INTO CHRecord(symbol,date,percent)VALUES"
 	var buf bytes.Buffer
 	buf.WriteString(instBase)
 	vals := []interface{}{}
 	for symbol, changes := range data {
 		for _, v := range changes {
-			buf.WriteString("(?,?,?,?),")
-			vals = append(vals, symbol, v.T, v.Percent, v.Close)
+			buf.WriteString("(?,?,?),")
+			vals = append(vals, symbol, v.T, v.Percent)
 		}
 	}
 	inst := buf.String()
